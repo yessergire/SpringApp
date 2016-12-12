@@ -1,0 +1,7 @@
+language: java
+script: mvn clean verify
+deploy:
+  provider: heroku
+  app: a-spring-app
+  api_key:
+    secure: NSSIJXIkL/2glO64jDj/TOtTExmDsPrtFq4QCYvZ88ts7ZoqcO0KZFyZ+5MU+iWfWYj/D/dI17xagCCzxFTwnngv4FKEX2tsbLnZjsiu+7ZyK2fmWBNquCh/6V6e2N8cF7SepU7P6x0TpeOO7Xa8uQRBiEqbDXxAtPZYa8KirWxpmP3fmzgCgQO/wNvOBCzCn5mGO/jRtwh1fdd7sYYYJ8DthYXgdwwfHjr4/P9wt22Orx9UE/xx4DLUutKZ9U/7aKzOiZw7y/QUvaezui7DTho+g4YniAuy18Uxj3XAlraaPMU3uXJZQZMullRsbL2uoW+5ZC7HduY1+zspW8c200JtD/VWYFBgNL31bUCw4r6+QjL0hAH+TaEF1l7qzUAlUnXY7Mf++1uotVWYl9X1c03u4gKTtCeuTu1nZ8E1ZlSzjAaRmerMKbFEui4/HTJSSLnu5Z4xN+wCfjPyBHawKASMtADiuF+wj4WA/irNYrsmjmpZ+EjKXcUbmqpf+0H7Gapgfcqta1J62IrFiEyS1yijt/9kdnAsrL2NYeZopfeVHnfwzgb+H8yQmpvc9jSZ4a+zyfA/C0NqYesXo+NHzhZARSFXMSUUg5eSG9aSTSxYr/Zg7/39RVvlgzCsiIIzdv+ZQ2PG0Ybjvt8MhYN2sbaz05gfZ6t+Mb/dryxnmuQ=

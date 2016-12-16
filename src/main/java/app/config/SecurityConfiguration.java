@@ -20,13 +20,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests()
+                .antMatchers("/signup")
+                .permitAll()
+                .anyRequest().authenticated();
         http.formLogin().permitAll();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder())
+            .and().inMemoryAuthentication()
+            .withUser("user").password("password").roles("USER");
     }
 
     @Bean

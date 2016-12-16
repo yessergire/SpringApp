@@ -8,10 +8,15 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @Entity
 public class Account extends AbstractPersistable<Long>{
 
+    @Length(min=3, max=40)
+    @NotBlank
     private String name;
 
+    @Length(min=5, max=40)
+    @NotBlank
     private String username;
 
+    @NotBlank
     private String password;
 
     private boolean adminAccess;

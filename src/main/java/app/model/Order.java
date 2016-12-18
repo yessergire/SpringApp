@@ -21,7 +21,7 @@ public class Order extends AbstractPersistable <Long> {
     private List<ProductOrder> productOrders;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @NotNull
+    //@NotNull
     private Customer customer;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

@@ -28,25 +28,7 @@ public class ItemController {
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute("products", itemRepository.findAll());
-        System.out.println(itemRepository.count());
         return "items";
-    }
-
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String addAnItem() {
-        return "item_form";
-    }
-
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable Long id, Model model) {
-        model.addAttribute("item", itemRepository.findOne(id));
-        return "item_form";
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String fetchItem(@PathVariable Long id, Model model) {
-        model.addAttribute("item", itemRepository.findOne(id));
-        return "item";
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -57,23 +39,6 @@ public class ItemController {
             return "items";
         }
         itemRepository.save(item);
-        return "redirect:/items";
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public String update(
-            @Valid @ModelAttribute Item updatedItem,
-            @PathVariable Long id,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "items";
-        }
-
-        Item item = itemRepository.findOne(id);
-        item.setName(updatedItem.getName());
-        item.setImageUrl(updatedItem.getImageUrl());
-
-        itemRepository.save(updatedItem);
         return "redirect:/items";
     }
 

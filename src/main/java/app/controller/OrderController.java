@@ -1,71 +1,70 @@
 package app.controller;
 
+import app.model.Cart;
 import app.model.Item;
-import app.repository.ItemRepository;
-import javax.validation.Valid;
+import app.model.Order;
+import app.model.ProductOrder;
+import app.repository.CustomerRepository;
+import app.repository.OrderRepository;
+import java.util.Calendar;
+import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/items")
-public class ItemController {
+@RequestMapping("/orders")
+public class OrderController {
     @Autowired
-    private ItemRepository itemRepository;
+    private OrderRepository orderRepository;
 
-    @ModelAttribute
-    public Item getItem() {
-        return new Item();
-    }
+    @Autowired
+    private CustomerRepository customerRepository;
+    
+    @Autowired
+    private Cart shoppingCart;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("items", itemRepository.findAll());
-        return "items";
+        model.addAttribute("orders", orderRepository.findAll());
+        return "orders";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String fetchItem(@PathVariable Long id, Model model) {
-        model.addAttribute("item", itemRepository.findOne(id));
-        return "item";
+    public String fetchOrder(@PathVariable Long id, Model model) {
+        model.addAttribute("order", orderRepository.findOne(id));
+        return "order";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(
-            @Valid @ModelAttribute Item item,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "items";
-        }
-        itemRepository.save(item);
-        return "redirect:/items";
-    }
+    public String create() {
+        Order order = new Order();
+        order.setOrderDate(Calendar.getInstance().getTime());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        order.setCustomer(customerRepository.findByUsername(auth.getName()));
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public String update(
-            @Valid @ModelAttribute Item updatedItem,
-            @PathVariable Long id,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "items";
+        Map<Item, Long> items = shoppingCart.getItems();
+        for (Item item: items.keySet()) {
+            ProductOrder orderItem = new ProductOrder();
+            orderItem.setItem(item);
+            orderItem.setCount(items.get(item));
+            order.getProductOrders().add(orderItem);
         }
 
-        Item item = itemRepository.findOne(id);
-        item.setName(updatedItem.getName());
-        item.setImageUrl(updatedItem.getImageUrl());
-
-        itemRepository.save(updatedItem);
-        return "redirect:/items";
+        shoppingCart.setItems(new TreeMap<>());
+        orderRepository.save(order);
+        return "redirect:/orders";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable Long id) {
-        itemRepository.delete(id);
-        return "redirect:/items";
+        orderRepository.delete(id);
+        return "redirect:/orders";
     }
 }

@@ -9,7 +9,7 @@
 
         <h1>Add a new product</h1>
 
-        <form action="#" th:action='@{/items/} + ${(item.id != null) ? item.id : ""}' th:object="${item}" th:method="put">
+        <form action="#" th:action="@{/items/}" th:object="${item}" method="post">
             <table>
                 <tr>
                     <td>Name: </td>

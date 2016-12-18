@@ -3,7 +3,10 @@ package app.controller;
 import static app.TestHelper.randomString;
 import app.model.Item;
 import app.repository.ItemRepository;
-import static org.junit.Assert.assertEquals;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +32,7 @@ public class ItemControllerTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    
+
     private final String url = "/items";
 
     @Before
@@ -50,7 +53,47 @@ public class ItemControllerTest {
     @Test
     public void GetShowsItemsPage() throws Exception {
         testThatMvcReturnsPage("The view should be created from items.html.",
-                mockMvc.perform(get("/items")), "items");
+                mockMvc.perform(get(url)), "items");
+    }
+
+    @Test
+    public void GetHasAModelThatContainsItems() throws Exception {
+        MvcResult res = mockMvc.perform(get(url))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("items"))
+                .andReturn();
+        List<Item> items = new ArrayList<>((Collection<Item>) res.getModelAndView().getModel().get("items"));
+        assertTrue("items is empty", items.isEmpty());
+
+        for (int i = 0; i < 10; i++) {
+            Item item = new Item();
+            item.setName(randomString(10));
+            item.setImageUrl(randomString(10));
+            itemRepository.save(item);
+        }
+        
+        res = mockMvc.perform(get(url))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("items"))
+                .andReturn();
+        items = new ArrayList<>((Collection<Item>) res.getModelAndView().getModel().get("items"));
+        assertEquals("The model should contain items", 10, items.size());
+    }
+
+    @Test
+    public void GetItemPageContainsItem() throws Exception {
+        Item expected = new Item();
+        expected.setName(randomString(10));
+        expected.setImageUrl(randomString(10));
+        expected = itemRepository.save(expected);
+
+        MvcResult res = mockMvc.perform(get(url + "/" + expected.getId()))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("item"))
+                .andReturn();
+
+        Item item = (Item) res.getModelAndView().getModel().get("item");
+        assertEquals("The model should contain the item", expected.getId(), item.getId());
     }
 
     @Test
@@ -67,7 +110,6 @@ public class ItemControllerTest {
 
         assertEquals("The created item should be stored to the database", itemRepository.count(), 1);
     }
-
 
     @Test
     public void SuccessfulPutUpdatesItemInDatabase() throws Exception {

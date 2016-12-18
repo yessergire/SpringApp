@@ -8,13 +8,19 @@ import static org.junit.Assert.*;
 public class OrderTest {
 
     @Test
-    public void testProductOrders() {
+    public void testSetProductOrders() {
         ProductOrder productOrder = new ProductOrder();
         ArrayList<ProductOrder> list = new ArrayList<>();
         list.add(productOrder);
         Order order = new Order();
         order.setProductOrders(list);
         assertEquals(list, order.getProductOrders());
+    }
+
+    @Test
+    public void testGetProductOrders() {
+        Order order = new Order();
+        assertNotNull(order.getProductOrders());
     }
 
     @Test
@@ -32,5 +38,4 @@ public class OrderTest {
         order.setOrderDate(date);
         assertEquals(date, order.getOrderDate());
     }
-    
 }

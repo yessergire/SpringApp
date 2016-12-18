@@ -1,9 +1,9 @@
 package app.controller;
 
-import app.model.Account;
-import app.repository.AccountRepository;
+import app.model.Customer;
 import java.util.UUID;
 import static org.junit.Assert.*;
+import static app.TestHelper.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,42 +17,34 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import app.repository.CustomerRepository;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class RegistrationControllerTest {
+
     @Autowired
-    private AccountRepository userRepository;
-    
+    private CustomerRepository userRepository;
+
     @Autowired
     private WebApplicationContext context;
-    
+
     private MockMvc mockMvc;
-    
+    private final String url = "/signup";
+
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
-    
-    private String randomString() {
-        return UUID.randomUUID().toString();
-    }
-    
-    private String randomString(int n) {
-        return randomString().substring(0, n);
-    }
-    
-    
+
     private void testThatMvcReturnsForm(String message, ResultActions actions) throws Exception {
-        MvcResult res = actions.andExpect(status().isOk()).andReturn();
-        assertEquals("The view should be created from the form.html-page.",
-                "form", res.getModelAndView().getViewName());
+        testThatMvcReturnsPage("The view should be created from the form.html page.", actions, "form");
     }
-    
+
     @Test
     public void GetShowsForm() throws Exception {
         testThatMvcReturnsForm("The view should be created from the form.html-page.",
-                mockMvc.perform(get("/signup")));
+                mockMvc.perform(get(url)));
     }
 
     @Test
@@ -61,7 +53,7 @@ public class RegistrationControllerTest {
         String username = randomString(10);
         String password = randomString(15);
 
-        mockMvc.perform(post("/signup")
+        mockMvc.perform(post(url)
                 .param("name", name)
                 .param("username", username)
                 .param("password", password))
@@ -69,13 +61,13 @@ public class RegistrationControllerTest {
                 .andExpect(redirectedUrl("/login"))
                 .andReturn();
 
-        Account user = userRepository.findByUsername(username);
-        assertNotNull("The sign account should be added to the database", user);
+        Customer user = userRepository.findByUsername(username);
+        assertNotNull("The created account should be added to the database", user);
     }
 
     private void InvalidPostReturnsForm(String message, String name,
             String username, String password) throws Exception {
-        ResultActions actions = mockMvc.perform(post("/signup")
+        ResultActions actions = mockMvc.perform(post(url)
                 .param("name", name)
                 .param("username", username)
                 .param("password", password));

@@ -1,7 +1,6 @@
 package app.controller;
 
-import app.model.Account;
-import app.repository.AccountRepository;
+import app.model.Customer;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,18 +10,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import app.repository.CustomerRepository;
 
 @Controller
 @RequestMapping("/signup")
 public class RegistrationController {
     @Autowired
-    private AccountRepository userRepository;
+    private CustomerRepository userRepository;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @ModelAttribute
-    public Account getAccount(){
-        return new Account();
+    public Customer getCustomer(){
+        return new Customer();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -32,14 +32,14 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String register(
-            @Valid @ModelAttribute Account account,
+            @Valid @ModelAttribute Customer customer,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "form";
         }
 
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        userRepository.save(account);
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        userRepository.save(customer);
 
         return "redirect:/login";
     }

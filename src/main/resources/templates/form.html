@@ -8,21 +8,21 @@
 
     <body>
         <h1>Sign Up!</h1>
-        <form action="#" th:action="@{/signup}" th:object="${account}" method="POST">
+        <form action="#" th:action="@{/signup}" th:object="${customer}" method="POST">
             <table>
                 <tr>
                     <td>Name: </td>
-                    <td><input type="text" th:field="*{name}" /></td>
+                    <td><input id="name" type="text" th:field="*{name}" /></td>
                     <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
                 </tr>
                 <tr>
                     <td>Username: </td>
-                    <td><input type="text" th:field="*{username}" /></td>
+                    <td><input id="username" type="text" th:field="*{username}" /></td>
                     <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</td>
                 </tr>
                 <tr>
                     <td>Password: </td>
-                    <td><input type="text" th:field="*{password}" /></td>
+                    <td><input id="password" type="text" th:field="*{password}" /></td>
                     <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
                 </tr>
                 <tr>

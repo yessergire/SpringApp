@@ -1,8 +1,8 @@
 package app.repository;
 
-import app.model.Account;
+import app.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
-    public Account findByUsername(String username);
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    public Customer findByUsername(String username);
 }

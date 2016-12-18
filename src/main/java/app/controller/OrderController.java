@@ -2,7 +2,6 @@ package app.controller;
 
 import app.model.Item;
 import app.repository.ItemRepository;
-import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/items")
 public class ItemController {
-
     @Autowired
     private ItemRepository itemRepository;
 
@@ -27,20 +25,8 @@ public class ItemController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("products", itemRepository.findAll());
-        System.out.println(itemRepository.count());
+        model.addAttribute("items", itemRepository.findAll());
         return "items";
-    }
-
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String addAnItem() {
-        return "item_form";
-    }
-
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable Long id, Model model) {
-        model.addAttribute("item", itemRepository.findOne(id));
-        return "item_form";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

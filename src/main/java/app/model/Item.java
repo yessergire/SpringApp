@@ -1,5 +1,6 @@
 package app.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import org.hibernate.validator.constraints.Length;
@@ -7,10 +8,11 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
-public class Item extends AbstractPersistable<Long> {
+public class Item extends AbstractPersistable<Long> implements Comparable<Item> {
 
     @NotBlank
     @Length(min = 3, max = 50)
+    @Column(unique = true)
     private String name;
 
     @NotBlank
@@ -53,6 +55,11 @@ public class Item extends AbstractPersistable<Long> {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        return name.compareTo(o.name);
     }
 
 }

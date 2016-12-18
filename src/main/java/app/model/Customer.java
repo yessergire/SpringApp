@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @Entity
-public class Account extends AbstractPersistable<Long>{
+public class Customer extends AbstractPersistable<Long>{
 
     @Length(min=3, max=40)
     @NotBlank

@@ -57,46 +57,6 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void GetHasAModelThatContainsItems() throws Exception {
-        MvcResult res = mockMvc.perform(get(url))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(model().attributeExists("items"))
-                .andReturn();
-        List<Item> items = new ArrayList<>((Collection<Item>) res.getModelAndView().getModel().get("items"));
-        assertTrue("items is empty", items.isEmpty());
-
-        for (int i = 0; i < 10; i++) {
-            Item item = new Item();
-            item.setName(randomString(10));
-            item.setImageUrl(randomString(10));
-            itemRepository.save(item);
-        }
-        
-        res = mockMvc.perform(get(url))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(model().attributeExists("items"))
-                .andReturn();
-        items = new ArrayList<>((Collection<Item>) res.getModelAndView().getModel().get("items"));
-        assertEquals("The model should contain items", 10, items.size());
-    }
-
-    @Test
-    public void GetItemPageContainsItem() throws Exception {
-        Item expected = new Item();
-        expected.setName(randomString(10));
-        expected.setImageUrl(randomString(10));
-        expected = itemRepository.save(expected);
-
-        MvcResult res = mockMvc.perform(get(url + "/" + expected.getId()))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(model().attributeExists("item"))
-                .andReturn();
-
-        Item item = (Item) res.getModelAndView().getModel().get("item");
-        assertEquals("The model should contain the item", expected.getId(), item.getId());
-    }
-
-    @Test
     public void SuccessfulPostStoresItemToDatabase() throws Exception {
         String name = randomString(10);
         String imageUrl = randomString(10);
@@ -109,27 +69,6 @@ public class ItemControllerTest {
                 .andReturn();
 
         assertEquals("The created item should be stored to the database", itemRepository.count(), 1);
-    }
-
-    @Test
-    public void SuccessfulPutUpdatesItemInDatabase() throws Exception {
-        Item item = new Item();
-        item.setName(randomString(10));
-        item.setImageUrl(randomString(10));
-        item = itemRepository.save(item);
-
-        String name = randomString(10);
-        String imageUrl = randomString(10);
-        mockMvc.perform(put(url + "/" + item.getId())
-                .param("name", name)
-                .param("imageUrl", imageUrl))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(url))
-                .andReturn();
-
-        item = itemRepository.findOne(item.getId());
-        assertEquals("The put should've updated the item", name, item.getName());
-        assertEquals("The put should've updated the item", imageUrl, item.getImageUrl());
     }
 
 }

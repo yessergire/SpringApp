@@ -1,11 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>My Web Application</title>
-      <meta charset="UTF-8" />
-  </head>
+  <head th:replace="fragments/header::header"></head>
   <body>
-    <h1>My Web Application!</h1>
+    <div th:replace="fragments/nav::nav"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="display-1">My Web Application!</h1>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer::footer"></div>
   </body>
 </html>
 

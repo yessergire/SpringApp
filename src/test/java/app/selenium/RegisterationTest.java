@@ -12,8 +12,6 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RegisterationTest extends FluentTest {
     public WebDriver driver = new HtmlUnitDriver();
 
@@ -25,7 +23,6 @@ public class RegisterationTest extends FluentTest {
     @LocalServerPort
     private Integer port;
 
-    @Ignore
     public void canRegister() {
         goTo("http://localhost:" + port + "/signup");
 

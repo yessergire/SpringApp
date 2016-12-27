@@ -26,7 +26,7 @@ public class CartTest {
     }
 
     @Test
-    public void testAdd() {
+    public void testAddNewItem() {
         Item item = new Item();
         item.setName(randomString());
 
@@ -37,7 +37,18 @@ public class CartTest {
     }
 
     @Test
-    public void testRemove() {
+    public void testAddIncrementsItemCount() {
+        Item item = new Item();
+        item.setName(randomString());
+
+        Cart cart = new Cart();
+        cart.add(item);
+        Map<Item, Long> map = cart.getItems();
+        assertEquals(2, map.size());
+    }
+
+    @Test
+    public void testRemoveDecrementsItemCount() {
         Item item = new Item();
         item.setName(randomString());
 
@@ -48,7 +59,29 @@ public class CartTest {
         
         cart.remove(item);
         assertEquals(1L, map.get(item).longValue());
+    }
 
+    @Test
+    public void testRemoveDeletesAnItemFromCart() {
+        Item item = new Item();
+        item.setName(randomString());
+
+        Cart cart = new Cart();
+        Map<Item, Long> map = cart.getItems();
+        map.put(item, 1L);
+        assertEquals(1L, map.get(item).longValue());
+
+        cart.remove(item);
+        assertFalse(map.containsKey(item));
+    }
+
+    @Test
+    public void testRemoveDoesNotDecrementCountForAnItemThatIsNotInTheCart() {
+        Item item = new Item();
+        item.setName(randomString());
+
+        Cart cart = new Cart();
+        Map<Item, Long> map = cart.getItems();
         cart.remove(item);
         assertFalse(map.containsKey(item));
     }

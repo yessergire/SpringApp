@@ -33,7 +33,7 @@ public class DefaultController {
     	customer.setPassword("password");
     	customerRepository.save(customer);
     	
-    	for (int i = 1; i <= 10; i++) {
+    	for (int i = 1; i <= 1000; i++) {
             Item item = new Item();
             item.setName("TV " + (1000 * i));
             item.setPrice(350.15 * i);

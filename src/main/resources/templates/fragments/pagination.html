@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Footer</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+	<nav aria-label="pagination" th:fragment="pagination">
+		<ul class="pagination">
+			<li class="page-item">
+			    <a class="page-link" href="?p=0">
+			        <span aria-hidden="true">&laquo;</span>
+			    </a>
+			</li>
+			<li class="page-item" th:classappend="${i == current} ? active : not-active" th:each="i : ${integer_list}">
+				<a class="page-link" th:href="${'?p=' + i}" th:text="${i + 1}"></a>
+			</li>
+			<li class="page-item">
+			    <a class="page-link" th:href="${'?p=' + (total - 1)}">
+			        <span aria-hidden="true">&raquo;</span>
+			    </a>
+			</li>
+		</ul>
+	</nav>
+</body>
+</html>

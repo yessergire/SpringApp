@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+	<div th:replace="fragments/nav::nav"></div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Add a new product</h1>
+
+				<form action="#" th:action="@{/items/}" th:object="${item}"
+					method="post">
+					<table>
+						<tr>
+							<td>Name:</td>
+							<td><input id="name" type="text" th:field="*{name}" /></td>
+							<td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name
+								Error</td>
+						</tr>
+						<tr>
+							<td>Image:</td>
+							<td><input id="imageUrl" type="text" th:field="*{imageUrl}" /></td>
+							<td th:if="${#fields.hasErrors('imageUrl')}"
+								th:errors="*{imageUrl}">Image Error</td>
+						</tr>
+						<tr>
+							<td>Price:</td>
+							<td><input id="price" type="text" th:field="*{price}" /></td>
+							<td th:if="${#fields.hasErrors('price')}" th:errors="*{price}">price
+								Error</td>
+						</tr>
+						<tr>
+							<td>Count:</td>
+							<td><input id="count" type="text" th:field="*{count}" /></td>
+							<td th:if="${#fields.hasErrors('count')}" th:errors="*{count}">count
+								Error</td>
+						</tr>
+						<tr>
+							<td><button type="submit">Submit</button></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>ß

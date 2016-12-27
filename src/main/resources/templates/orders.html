@@ -10,14 +10,18 @@
       <table class="table table-condensed">
         <thead>
           <tr>
+            <th>#</th>
             <th>Name</th>
             <th>Ordered</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
             <td th:text="${order.customer.name}"></td>
             <td th:text="${order.orderDate}"></td>
+            <td><a th:href="@{/orders/{id}(id=${order.id})}">View more</a></td>
           </tr>
         </tbody>
       </table>

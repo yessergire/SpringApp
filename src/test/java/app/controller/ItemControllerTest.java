@@ -97,6 +97,8 @@ public class ItemControllerTest {
                 .andReturn();
 
         assertEquals("The created item should be stored to the database", itemRepository.count(), 1);
+        assertEquals("The created item should be stored to the database", item,
+        		itemRepository.findAll().get(0));
     }
 
 
@@ -114,25 +116,19 @@ public class ItemControllerTest {
         Item item = getRandomItem();
         item = itemRepository.save(item);
 
-        String name = randomString(10);
-        String imageUrl = randomString(10);
-        double price = Math.random();
-        long count = (int) (Math.random() * 100);
+        Item updatedItem = getRandomItem();
 
         mockMvc.perform(post(url + "/" + item.getId())
-                .param("name", name)
-                .param("imageUrl", imageUrl)
-                .param("price", Double.toString(price))
-                .param("count", Long.toString(count)))
+                .param("name", updatedItem.getName())
+                .param("imageUrl", updatedItem.getImageUrl())
+                .param("price", Double.toString(updatedItem.getPrice()))
+                .param("count", Long.toString(updatedItem.getCount())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(url + "/" + item.getId()))
                 .andReturn();
 
         item = itemRepository.findOne(item.getId());
-        assertEquals("The post should've updated the item", name, item.getName());
-        assertEquals("The post should've updated the item", imageUrl, item.getImageUrl());
-        assertEquals("The post should've updated the item", price, item.getPrice(), 1e-5);
-        assertEquals("The post should've updated the item", count, item.getCount());
+        assertEquals("The post should've updated the item", updatedItem, item);
     }
 
     @Test

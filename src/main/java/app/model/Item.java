@@ -26,40 +26,58 @@ public class Item extends AbstractPersistable<Long> implements Comparable<Item> 
     private double price;
 
     public String getName() {
-        return name;
+	return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+	this.name = name;
     }
 
     public String getImageUrl() {
-        return imageUrl;
+	return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+	this.imageUrl = imageUrl;
     }
 
     public long getCount() {
-        return count;
+	return count;
     }
 
     public void setCount(long count) {
-        this.count = count;
+	this.count = count;
     }
 
     public double getPrice() {
-        return price;
+	return price;
     }
 
     public void setPrice(double price) {
-        this.price = price;
+	this.price = price;
     }
 
     @Override
-    public int compareTo(Item o) {
-        return name.compareTo(o.name);
+    public int compareTo(Item item) {
+	return name.compareTo(item.name);
     }
 
+    @Override
+    public boolean equals(Object o) {
+	Item item = (Item) o;
+	if (name != null && !name.equals(item.name)) {
+	    return false;
+	}
+	if (imageUrl != null && !imageUrl.equals(item.imageUrl)) {
+	    return false;
+	}
+	if (item.count != count) {
+	    return false;
+	}
+	if (Math.abs(price - item.price) > 1e-9) {
+	    return false;
+	}
+	return true;
+
+    }
 }

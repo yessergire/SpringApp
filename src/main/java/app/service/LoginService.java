@@ -1,5 +1,5 @@
 package app.service;
-
+/*
 import app.model.Customer;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,3 +34,4 @@ public class LoginService implements UserDetailsService {
                 Arrays.asList(new SimpleGrantedAuthority("USER")));
     }
 }
+*/

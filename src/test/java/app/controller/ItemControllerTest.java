@@ -1,13 +1,9 @@
 package app.controller;
 
-import static app.TestHelper.randomString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static app.TestHelper.*;
+import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -44,26 +39,59 @@ public class ItemControllerTest {
         itemRepository.deleteAll();
     }
 
-    private void testThatMvcReturnsPage(String message, ResultActions actions, String page) throws Exception {
-        MvcResult res = actions.andExpect(status().isOk()).andReturn();
-        assertEquals("The view should be created from the item.html page.",
-        		page, res.getModelAndView().getViewName());
+    private Item getRandomItem() {
+    	Item item = new Item();
+        item.setName(randomString(10));
+        item.setImageUrl(randomString(10));
+        item.setPrice(Math.random());
+        item.setCount((int) (Math.random() * 100));
+    	return item;
     }
 
     @Test
-    public void GetShowsItemsPage() throws Exception {
-        testThatMvcReturnsPage("The view should be created from items.html.",
+    public void GetItemsShowsItemsPage() throws Exception {
+        testThatMvcReturnsPage("The view should be created from items/items.html.",
                 mockMvc.perform(get(url)), "items/items");
     }
 
     @Test
+    public void GetItemShowsItemPage() throws Exception {
+    	Item item = getRandomItem();
+    	item = itemRepository.save(item);
+
+        MvcResult res = testThatMvcReturnsPage("The view should be created from items/item.html.",
+                mockMvc.perform(get(url + "/" + item.getId())), "items/item");
+
+        assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
+    }
+
+    @Test
+    public void GetAddItemShowsAddItemPage() throws Exception {
+        testThatMvcReturnsPage("The view should be created from items/add_item_form.html.",
+                mockMvc.perform(get(url + "/new")), "items/add_item_form");
+    }
+
+
+    @Test
+    public void GetEditItemShowsEditItemPage() throws Exception {
+    	Item item = getRandomItem();
+    	item = itemRepository.save(item);
+
+        MvcResult res = testThatMvcReturnsPage("The view should be created from items/edit_item_form.html.",
+                mockMvc.perform(get(url + "/" + item.getId() + "/edit")), "items/edit_item_form");
+
+        assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
+    }
+
+    @Test
     public void SuccessfulPostStoresItemToDatabase() throws Exception {
-        String name = randomString(10);
-        String imageUrl = randomString(10);
+    	Item item = getRandomItem();
 
         mockMvc.perform(post(url)
-                .param("name", name)
-                .param("imageUrl", imageUrl))
+                .param("name", item.getName())
+                .param("imageUrl", item.getImageUrl())
+                .param("price", Double.toString(item.getPrice()))
+                .param("count", Long.toString(item.getCount())))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(url))
                 .andReturn();
@@ -71,39 +99,71 @@ public class ItemControllerTest {
         assertEquals("The created item should be stored to the database", itemRepository.count(), 1);
     }
 
+
     @Test
-    public void SuccessfulPostUpdatesItemInDatabase() throws Exception {
-        Item item = new Item();
-        item.setName(randomString(10));
-        item.setImageUrl(randomString(10));
+    public void UnsuccessfulPostDoesNotStoreItemToDatabase() throws Exception {
+        MvcResult res = testThatMvcReturnsPage("The view should be created from items/add_item_form.html.",
+                mockMvc.perform(post(url)), "items/add_item_form");
+
+        assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
+        assertEquals("The item should not be stored to the database", itemRepository.count(), 0);
+    }
+
+    @Test
+    public void SuccessfulPostUpdatesItemInTheDatabase() throws Exception {
+        Item item = getRandomItem();
         item = itemRepository.save(item);
 
         String name = randomString(10);
         String imageUrl = randomString(10);
         double price = Math.random();
-        int count = (int) (Math.random() * 100);
+        long count = (int) (Math.random() * 100);
 
         mockMvc.perform(post(url + "/" + item.getId())
                 .param("name", name)
                 .param("imageUrl", imageUrl)
                 .param("price", Double.toString(price))
-                .param("count", Integer.toString(count)))
+                .param("count", Long.toString(count)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(url + "/" + item.getId()))
                 .andReturn();
 
         item = itemRepository.findOne(item.getId());
-        assertEquals("The put should've updated the item", name, item.getName());
-        assertEquals("The put should've updated the item", imageUrl, item.getImageUrl());
-        assertEquals("The put should've updated the item", price, item.getPrice(), 1e-5);
-        assertEquals("The put should've updated the item", count, item.getCount());
+        assertEquals("The post should've updated the item", name, item.getName());
+        assertEquals("The post should've updated the item", imageUrl, item.getImageUrl());
+        assertEquals("The post should've updated the item", price, item.getPrice(), 1e-5);
+        assertEquals("The post should've updated the item", count, item.getCount());
+    }
+
+    @Test
+    public void UnsuccessfulPostDoesNotUpdateItemInTheDatabase() throws Exception {
+        Item item = getRandomItem();
+        item = itemRepository.save(item);
+
+        String name = "";
+        String imageUrl = "";
+        double price = -1D;
+        long count = -1L;
+
+        MvcResult res = testThatMvcReturnsPage("The view should be created from items/edit_item_form.html.",
+                mockMvc.perform(post(url + "/" + item.getId())
+                        .param("name", name)
+                        .param("imageUrl", imageUrl)
+                        .param("price", Double.toString(price))
+                        .param("count", Long.toString(count))), "items/edit_item_form");
+
+        assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
+
+        item = itemRepository.findOne(item.getId());
+        assertNotEquals("The post should not update the item", name, item.getName());
+        assertNotEquals("The post should not update the item", imageUrl, item.getImageUrl());
+        assertNotEquals("The post should not update the item", price, item.getPrice(), 1e-5);
+        assertNotEquals("The post should not update the item", count, item.getCount());
     }
 
     @Test
     public void SuccessfulDeleteRemovesItemFromDatabase() throws Exception {
-        Item item = new Item();
-        item.setName(randomString(10));
-        item.setImageUrl(randomString(10));
+        Item item = getRandomItem();
         item = itemRepository.save(item);
 
         mockMvc.perform(delete(url + "/" + item.getId()))

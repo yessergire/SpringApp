@@ -16,9 +16,10 @@ public class TestHelper {
         return randomString().substring(0, n);
     }
 
-    public static void testThatMvcReturnsPage(String message, ResultActions actions, String view) throws Exception {
+    public static MvcResult testThatMvcReturnsPage(String message, ResultActions actions, String view) throws Exception {
         MvcResult res = actions.andExpect(status().isOk()).andReturn();
         assertEquals(message, view, res.getModelAndView().getViewName());
+        return res;
     }
 
 }

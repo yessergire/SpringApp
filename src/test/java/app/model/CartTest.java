@@ -44,7 +44,7 @@ public class CartTest {
         Cart cart = new Cart();
         cart.add(item);
         Map<Item, Long> map = cart.getItems();
-        assertEquals(2, map.size());
+        assertEquals(1, map.size());
     }
 
     @Test

@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Products</title>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
+<head th:replace="fragments/header::header"></head>
+<body>
+  <div th:replace="fragments/nav::nav"></div>
+  <div class="container">
+    <div class="row">
+        <h1>Orders</h1>
 
-        <h1>You're orders</h1>
-        <ul>
-            <li th:each="order : ${orders}">
-                <ol>
-                    <li th:each="prod : ${order.productOrders}">
-                        <span th:text="${prod.item.name}">Item name</span>
-                        (<span th:text="${prod.item.price}">Item price</span>) <br/>
-                        There are <span th:text="${prod.count}">Item count</span> items in you're order.
-                    </li>
-                </ol>
-            </li>
-        </ul>
-    </body>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Ordered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="order : ${orders}">
+            <td th:text="${order.customer.name}"></td>
+            <td th:text="${order.orderDate}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div th:replace="fragments/footer::footer"></div>
+</body>
 </html>

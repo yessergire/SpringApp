@@ -12,7 +12,7 @@ import app.repository.CustomerRepository;
 import app.repository.ItemRepository;
 
 @Configuration
-@Profile("Production")
+@Profile("production")
 public class ProdProfile {
 
     @Autowired

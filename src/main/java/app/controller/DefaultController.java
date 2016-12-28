@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import app.model.Cart;
 import app.model.Customer;
 import app.model.Item;
 import app.repository.CustomerRepository;
@@ -21,9 +20,6 @@ public class DefaultController {
 
     @Autowired
     private ItemRepository itemRepository;
-
-    @Autowired
-    private Cart cart;
 
     @PostConstruct
     public void init() {
@@ -56,7 +52,6 @@ public class DefaultController {
 
     @RequestMapping("*")
     public String handleDefault(Model model) {
-		model.addAttribute("cart", cart);
         return "home";
     }
 

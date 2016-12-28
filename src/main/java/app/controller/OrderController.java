@@ -27,21 +27,19 @@ public class OrderController {
 
     @Autowired
     private CustomerRepository customerRepository;
-    
+
     @Autowired
     private Cart shoppingCart;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute("orders", orderRepository.findAll());
-        model.addAttribute("cart", shoppingCart);
         return "orders";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String fetchOrder(@PathVariable Long id, Model model) {
         model.addAttribute("order", orderRepository.findOne(id));
-        model.addAttribute("cart", shoppingCart);
         return "order";
     }
 

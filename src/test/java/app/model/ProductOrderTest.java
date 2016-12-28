@@ -19,5 +19,13 @@ public class ProductOrderTest {
         productOrder.setCount(count);
         assertEquals(count, productOrder.getCount());
     }
+
+    @Test
+    public void testOrder() {
+        ProductOrder productOrder = new ProductOrder();
+        Order order = new Order();
+        productOrder.setOrder(order);
+        assertEquals(order, productOrder.getOrder());
+    }
     
 }

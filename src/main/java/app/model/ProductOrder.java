@@ -14,6 +14,10 @@ public class ProductOrder extends AbstractPersistable<Long> {
     @NotNull
     private Item item;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
+    private Order order;
+
     @Min(1)
     private long count;
 
@@ -31,6 +35,14 @@ public class ProductOrder extends AbstractPersistable<Long> {
 
     public void setCount(long count) {
         this.count = count;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
 }

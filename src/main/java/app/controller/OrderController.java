@@ -18,12 +18,16 @@ import app.model.Order;
 import app.model.ProductOrder;
 import app.repository.CustomerRepository;
 import app.repository.OrderRepository;
+import app.repository.ProductOrderRepository;
 
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductOrderRepository productOrderRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -51,10 +55,13 @@ public class OrderController {
         order.setCustomer(customerRepository.findAll().get(0));
 
         Map<Item, Long> items = shoppingCart.getItems();
+        orderRepository.save(order);
         for (Item item: items.keySet()) {
             ProductOrder orderItem = new ProductOrder();
             orderItem.setItem(item);
             orderItem.setCount(items.get(item));
+            orderItem.setOrder(order);
+            orderItem = productOrderRepository.save(orderItem);
             order.getProductOrders().add(orderItem);
         }
 

@@ -1,6 +1,7 @@
 package app.controller;
 
 import static app.TestHelper.*;
+import static app.model.ItemTest.*;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,15 +40,6 @@ public class ItemControllerTest {
         itemRepository.deleteAll();
     }
 
-    private Item getRandomItem() {
-    	Item item = new Item();
-        item.setName(randomString(10));
-        item.setImageUrl(randomString(10));
-        item.setPrice(Math.random());
-        item.setCount((int) (Math.random() * 100));
-    	return item;
-    }
-
     @Test
     public void GetItemsShowsItemsPage() throws Exception {
         testThatMvcReturnsPage("The view should be created from items/items.html.",
@@ -84,7 +76,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void SuccessfulPostStoresItemToDatabase() throws Exception {
+    public void SuccessfulPostStoresItemToTheDatabase() throws Exception {
     	Item item = getRandomItem();
 
         mockMvc.perform(post(url)
@@ -103,7 +95,7 @@ public class ItemControllerTest {
 
 
     @Test
-    public void UnsuccessfulPostDoesNotStoreItemToDatabase() throws Exception {
+    public void UnsuccessfulPostDoesNotStoreItemToTheDatabase() throws Exception {
         MvcResult res = testThatMvcReturnsPage("The view should be created from items/add_item_form.html.",
                 mockMvc.perform(post(url)), "items/add_item_form");
 
@@ -158,7 +150,7 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void SuccessfulDeleteRemovesItemFromDatabase() throws Exception {
+    public void SuccessfulDeleteRemovesItemFromTheDatabase() throws Exception {
         Item item = getRandomItem();
         item = itemRepository.save(item);
 

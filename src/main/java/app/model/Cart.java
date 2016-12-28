@@ -11,12 +11,9 @@ import org.springframework.stereotype.Component;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Cart implements Serializable {
 
-    private Map<Item, Long> items;
+    private Map<Item, Long> items = new TreeMap<>();;
 
     public Map<Item, Long> getItems() {
-        if (items == null) {
-            items = new TreeMap<>();
-        }
         return items;
     }
 
@@ -25,16 +22,20 @@ public class Cart implements Serializable {
     }
     
     public void add(Item item) {
-        getItems().put(item, 1L + getItems().getOrDefault(item, 0L));
+        if (items.containsKey(item)) {
+            items.put(item, 1L + items.get(item));
+        } else {
+            items.put(item, 1L);
+        }
     }
 
     public void remove(Item item) {
-        if (getItems().containsKey(item)) {
-            if (getItems().get(item) > 1) {
-                getItems().put(item, getItems().get(item) - 1);
+        if (items.containsKey(item)) {
+            if (items.get(item) > 1) {
+        	items.put(item, items.get(item) - 1);
             }
             else {
-                getItems().remove(item);
+        	items.remove(item);
             }
         }
     }

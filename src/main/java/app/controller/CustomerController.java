@@ -31,9 +31,6 @@ public class CustomerController {
     @Autowired
     private PaginationService paginationService;
 
-    @Autowired
-    private CurrentUserService currentUserService;
-
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @ModelAttribute
@@ -79,10 +76,6 @@ public class CustomerController {
     @Secured("USER")
     @RequestMapping(value = "/customers/{id}/edit", method = RequestMethod.GET)
     public String edit(@PathVariable Long id, Model model) {
-	if (!currentUserService.isCorrectUser(id)) {
-	    return "redirect:/logout";
-	}
-
 	model.addAttribute("customer", customerRepository.findOne(id));
 	return "customers/edit";
     }
@@ -91,10 +84,6 @@ public class CustomerController {
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute Customer updatedCustomer, BindingResult bindingResult,
 	    @PathVariable Long id) {
-	if (!currentUserService.isCorrectUser(id)) {
-	    return "redirect:/logout";
-	}
-
 	if (bindingResult.hasErrors()) {
 	    return "customers/edit";
 	}
@@ -111,10 +100,6 @@ public class CustomerController {
     @Secured("USER")
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable Long id) {
-	if (!currentUserService.isCorrectUser(id)) {
-	    return "redirect:/logout";
-	}
-
 	customerRepository.delete(id);
 	return "redirect:/login";
     }

@@ -20,9 +20,4 @@ public class CurrentUserService {
         return customer;
     }
 
-    public boolean isCorrectUser(Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Customer customer = customerRepository.findByUsername(auth.getName().toString());
-        return customer.getId() == id;
-    }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/header::header"></head>
+    <body>
+        <div th:replace="fragments/nav::nav"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>View all categories</h1>
+                    <ul>
+                        <li th:each="category : ${categories}" >
+                           <strong>
+                               <a th:text="${category.name}" th:href="@{/categories/{id}(id=${category.id})}">
+                                 category name
+                               </a>
+                           </strong>
+                           <span th:text="${category.description}">Description</span>
+                        </li>
+                    </ul>
+
+                <nav th:replace="fragments/pagination::pagination"></nav>
+              </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer::footer"></div>
+    </body>
+</html>

@@ -42,8 +42,10 @@ public class ItemControllerTest {
 
     @Test
     public void GetItemsShowsItemsPage() throws Exception {
-        testThatMvcReturnsPage("The view should be created from items/items.html.",
-                mockMvc.perform(get(url)), "items/items");
+	MvcResult res = testThatMvcReturnsPage("The view should be created from items/items.html.",
+                mockMvc.perform(get(url)), "items/list");
+
+        assertTrue(res.getModelAndView().getModelMap().containsKey("products"));
     }
 
     @Test
@@ -52,7 +54,7 @@ public class ItemControllerTest {
     	item = itemRepository.save(item);
 
         MvcResult res = testThatMvcReturnsPage("The view should be created from items/item.html.",
-                mockMvc.perform(get(url + "/" + item.getId())), "items/item");
+                mockMvc.perform(get(url + "/" + item.getId())), "items/show");
 
         assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
     }
@@ -60,7 +62,7 @@ public class ItemControllerTest {
     @Test
     public void GetAddItemShowsAddItemPage() throws Exception {
         testThatMvcReturnsPage("The view should be created from items/add_item_form.html.",
-                mockMvc.perform(get(url + "/new")), "items/add_item_form");
+                mockMvc.perform(get(url + "/new")), "items/new");
     }
 
 
@@ -70,7 +72,7 @@ public class ItemControllerTest {
     	item = itemRepository.save(item);
 
         MvcResult res = testThatMvcReturnsPage("The view should be created from items/edit_item_form.html.",
-                mockMvc.perform(get(url + "/" + item.getId() + "/edit")), "items/edit_item_form");
+                mockMvc.perform(get(url + "/" + item.getId() + "/edit")), "items/edit");
 
         assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
     }
@@ -96,8 +98,8 @@ public class ItemControllerTest {
 
     @Test
     public void UnsuccessfulPostDoesNotStoreItemToTheDatabase() throws Exception {
-        MvcResult res = testThatMvcReturnsPage("The view should be created from items/add_item_form.html.",
-                mockMvc.perform(post(url)), "items/add_item_form");
+        MvcResult res = testThatMvcReturnsPage("The view should be created from items/new.html.",
+                mockMvc.perform(post(url)), "items/new");
 
         assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
         assertEquals("The item should not be stored to the database", itemRepository.count(), 0);
@@ -133,12 +135,12 @@ public class ItemControllerTest {
         double price = -1D;
         long count = -1L;
 
-        MvcResult res = testThatMvcReturnsPage("The view should be created from items/edit_item_form.html.",
+        MvcResult res = testThatMvcReturnsPage("The view should be created from items/edit.html.",
                 mockMvc.perform(post(url + "/" + item.getId())
                         .param("name", name)
                         .param("imageUrl", imageUrl)
                         .param("price", Double.toString(price))
-                        .param("count", Long.toString(count))), "items/edit_item_form");
+                        .param("count", Long.toString(count))), "items/edit");
 
         assertTrue(res.getModelAndView().getModelMap().containsKey("item"));
 

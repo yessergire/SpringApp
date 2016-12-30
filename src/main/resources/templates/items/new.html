@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+    <div th:replace="fragments/nav::nav"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>New Item</h1>
+                <form action="#" th:action="@{/items}" th:object="${item}" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input class="form-control" id="name" type="text" th:field="*{name}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageUrl">Image</label>
+                        <input class="form-control" id="imageUrl" type="text" th:field="*{imageUrl}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input class="form-control" id="price" type="text" th:field="*{price}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="count">Items in store</label>
+                        <input class="form-control" id="count" type="text" th:field="*{count}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('count')}" th:errors="*{count}">Error</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

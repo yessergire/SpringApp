@@ -2,9 +2,19 @@ package app.model;
 
 import java.util.UUID;
 import org.junit.Test;
+
+import static app.TestHelper.randomString;
 import static org.junit.Assert.*;
 
 public class CustomerTest {
+
+    public static Customer getRandomCustomer() {
+	Customer customer = new Customer();
+	customer.setName(randomString(10));
+	customer.setUsername(randomString(10));
+	customer.setPassword(randomString(10));
+    	return customer;
+    }
 
     @Test
     public void testName() {

@@ -20,11 +20,22 @@
 				<p>
 					There are <span th:text="${item.count}">Item count</span> items in store.
 				</p>
-				<p>
-				    <a th:href="@{/items/{id}/edit(id=${item.id})}" class="btn btn-primary">Edit</a>
-				    <a href="#" class="btn btn-danger" onclick="$('#delete-form').submit();">Delete</a>
+
+				<p>Categories:
+				    <ul>
+				        <li th:each="category : ${item.categories}">
+				            <a th:text="${category.name}" th:href="@{/categories/{id}(id=${category.id})}">category</a>
+				        </li>
+				    </ul>
 				</p>
-				    <form style="display: hidden;" action="#" id="delete-form" th:action="@{/items/{id}(id=${item.id})}" th:method="DELETE"></form>
+
+				<div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <p>
+                        <a th:href="@{/items/{id}/edit(id=${item.id})}" class="btn btn-primary">Edit</a>
+                        <a href="#" class="btn btn-danger" onclick="$('#delete-form').submit();">Delete</a>
+                    </p>
+                    <form style="display: hidden;" action="#" id="delete-form" th:action="@{/items/{id}(id=${item.id})}" th:method="DELETE"></form>
+				</div>
 			</div>
 		</div>
 	</div>

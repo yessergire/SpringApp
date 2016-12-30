@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+    <div th:replace="fragments/nav::nav"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Sign Up!</h1>
+                <form action="#" th:action="@{/customers}" th:object="${customer}" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input class="form-control" id="name" type="text" th:field="*{name}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Username</label>
+                        <input class="form-control" id="username" type="text" th:field="*{username}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Password</label>
+                        <input class="form-control" id="password" type="text" th:field="*{password}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

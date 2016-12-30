@@ -1,8 +1,9 @@
 package app.config;
-/*
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,23 +23,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/signup")
+                .antMatchers("/")
+                .permitAll()
+            .and()
+                .authorizeRequests()
+                .antMatchers("/signup", "/cart/**")
+                .permitAll()
+            .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/items", "/items/{id}")
+                .permitAll()
+            .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/categories", "/categories/{id}")
                 .permitAll();
-        http.authorizeRequests()
-                .antMatchers("/items/*")
-                .permitAll();
+
         http.authorizeRequests()
                 .anyRequest().authenticated()
-                .and().formLogin().permitAll()
+                .and().formLogin()
+                .permitAll()
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder())
-            .and().inMemoryAuthentication()
-            .withUser("user").password("password").roles("USER");
+	auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -46,4 +56,3 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 }
-*/

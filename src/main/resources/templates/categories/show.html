@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+	<div th:replace="fragments/nav::nav"></div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1 th:text="${category.name}">category</h1>
+				<p th:text="${category.description}">category</p>
+
+				<div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <p>
+                        <a th:href="@{/categories/{id}/edit(id=${category.id})}" class="btn btn-primary">Edit</a>
+                        <a href="#" class="btn btn-danger" onclick="$('#delete-form').submit();">Delete</a>
+                    </p>
+                    <form style="display: hidden;" action="#" id="delete-form" th:action="@{/categories/{id}(id=${category.id})}" th:method="DELETE"></form>
+				</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="item : ${items}" >
+                            <div class="media">
+                                <a class="media-left" href="#">
+                                    <img width="150" class="img-thumbnail media-object" th:src="${item.imageUrl}" src="http://lorempixel.com/200/150/cats/1" />
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        <a th:text="${item.name}" th:href="@{/items/{id}(id=${item.id})}">Item name</a>
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <ul style="list-style: none">
+                                                <li><img src="http://jureviciousstudios.com/wp-content/uploads/2014/01/Reputation-Management-for-Internet-Reviews-and-Ratings.png" width="100" /></li>
+                                                <li th:text="${item.price}">Item price</li>
+                                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <form th:method="POST" th:action="@{/cart/items/{id}(id=${item.id})}" >
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                <div th:replace="fragments/pagination::pagination"></div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

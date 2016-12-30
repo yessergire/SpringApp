@@ -21,7 +21,7 @@ public class Order extends AbstractPersistable <Long> {
     private List<ProductOrder> productOrders;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    //@NotNull
+    @NotNull
     private Customer customer;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -54,5 +54,12 @@ public class Order extends AbstractPersistable <Long> {
         this.orderDate = orderDate;
     }
     
-    
+    public double getTotal() {
+	double total = 0;
+	
+	for (ProductOrder p: getProductOrders()) {
+	    total += p.getCount() * p.getItem().getPrice();
+	}
+	return total;
+    }
 }

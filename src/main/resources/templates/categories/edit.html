@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+    <div th:replace="fragments/nav::nav"></div>
+
+    <div class="container" sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Edit Category</h1>
+                <form action="#" th:action="@{/categories/{id}(id=${category.id})}" th:object="${category}" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input class="form-control" id="name" type="text" th:field="*{name}" />
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="imageUrl" type="text" th:field="*{description}"></textarea>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

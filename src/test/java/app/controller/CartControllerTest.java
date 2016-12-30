@@ -50,7 +50,7 @@ public class CartControllerTest {
     }
 
     @Test
-    public void GetCaArtShowsCartPage() throws Exception {
+    public void GetCartShowsCartPage() throws Exception {
 	MvcResult res = testThatMvcReturnsPage("The view should be created from cart.html.",
                 mockMvc.perform(get(url)), "cart");
         assertTrue(res.getModelAndView().getModelMap().containsKey("cart"));

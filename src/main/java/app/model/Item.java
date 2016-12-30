@@ -1,8 +1,13 @@
 package app.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Min;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -24,6 +29,9 @@ public class Item extends AbstractPersistable<Long> implements Comparable<Item> 
 
     @Min(0)
     private double price;
+
+    @ManyToMany
+    private List<Category> categories;
 
     public String getName() {
 	return name;
@@ -60,6 +68,17 @@ public class Item extends AbstractPersistable<Long> implements Comparable<Item> 
     @Override
     public int compareTo(Item item) {
 	return name.compareTo(item.name);
+    }
+
+    public List<Category> getCategories() {
+	if (categories == null) {
+	    categories = new ArrayList<>();
+	}
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class DefaultController {
 
-    @RequestMapping("*")
+    @RequestMapping("/")
     public String handleDefault(Model model) {
         return "home";
     }

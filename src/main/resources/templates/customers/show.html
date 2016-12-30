@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header"></head>
+<body>
+	<div th:replace="fragments/nav::nav"></div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1 th:text="${customer.name}">Customer</h1>
+				<p>
+					Username: <i><span th:text="${customer.username}"></span></i>
+				</p>
+
+				<div th:if="${orders != null}">
+					<h3>Orders:</h3>
+					<ul>
+						<li th:each="order: ${orders}">
+						    <a th:href="@{orders/{id}(id=${order.id})}">
+						        #<span th:text="${order.id}">ID</span>
+						        (<span th:text="${{order.orderDate}}">Order Date</span>)
+						    </a>
+						</li>
+					</ul>
+				</div>
+
+                <div>
+                    <p>
+                        <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-primary">Edit</a>
+                        <a href="#" class="btn btn-danger" onclick="$('#delete-form').submit();">Delete</a>
+                    </p>
+                    <form style="display: hidden;" action="#" id="delete-form" th:action="@{/customers/{id}(id=${customer.id})}" th:method="DELETE"></form>
+                </div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

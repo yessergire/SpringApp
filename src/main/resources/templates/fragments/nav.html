@@ -14,8 +14,17 @@
                     <a class="nav-item nav-link active" href="/">Home</a>
                     <a class="nav-item nav-link" href="/items">Items</a>
                     <div class="float-xs-right">
-                    <a class="navbar-brand nav-item nav-link" href="/cart">
-                        <i class="tag tag-primary fa fa-shopping-cart"></i></a>
+                    <a sec:authorize="isAuthenticated()" class="navbar-brand nav-item nav-link" href="/cart">
+                        <i class="fa fa-shopping-cart"></i></a>
+                    <a sec:authorize="!isAuthenticated()" class="nav-item nav-link" href="/login">
+                        <i class="fa fa-sign-in"></i> Login
+                    </a>
+                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" href="/logout">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                    <a sec:authorize="isAuthenticated()" class="nav-item nav-link" href="/account">
+                        <i class="fa fa-user"></i> Account
+                    </a>
                     </div>
                 </div>
             </div>

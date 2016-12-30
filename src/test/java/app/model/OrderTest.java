@@ -1,9 +1,12 @@
 package app.model;
 
+import static app.model.ItemTest.getRandomItem;
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.Date;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class OrderTest {
 
@@ -37,5 +40,23 @@ public class OrderTest {
         Order order = new Order();
         order.setOrderDate(date);
         assertEquals(date, order.getOrderDate());
+    }
+
+    @Test
+    public void testGetTotal() {
+        ArrayList<ProductOrder> list = new ArrayList<>();
+        
+        for (int i = 0; i < 10; i++) {
+            ProductOrder productOrder = new ProductOrder();
+            Item item = getRandomItem();
+            item.setPrice(1.5);
+            productOrder.setItem(item);
+            productOrder.setCount(10);
+            list.add(productOrder);
+        }
+        Order order = new Order();
+        order.setProductOrders(list);
+
+        assertEquals(150, order.getTotal(), 1e-9);
     }
 }

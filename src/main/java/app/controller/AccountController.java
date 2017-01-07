@@ -28,7 +28,7 @@ public class AccountController {
 	Customer customer = currentUserService.getCustomer();
 	model.addAttribute("customer", customer);
 	model.addAttribute("orders", orderRepository.findByCustomer(customer));
-	return "customers/customer";
+	return "customers/show";
     }
 
 }
